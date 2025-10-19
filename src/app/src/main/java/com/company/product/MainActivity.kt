@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
-</parameter>
 
         // Check notification permission (Android 13+)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
@@ -64,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                 return
             }
         }
-</parameter>
 
         // Check overlay permission
         if (!Settings.canDrawOverlays(this)) {
@@ -73,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE)
             return
         }
-</parameter>
 
         // Check usage stats permission
         if (!hasUsageStatsPermission()) {
@@ -82,7 +79,6 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, USAGE_STATS_PERMISSION_REQUEST_CODE)
             return
         }
-</parameter>
 
         // All permissions granted, start overlay service
         updateStatus("Toutes les permissions accordées ! Démarrage du service...")
@@ -93,7 +89,6 @@ class MainActivity : AppCompatActivity() {
             finish() // Close main activity
         }, 1000)
     }
-</parameter>
 
     private fun hasUsageStatsPermission(): Boolean {
         val appOps = getSystemService(APP_OPS_SERVICE) as android.app.AppOpsManager
@@ -116,7 +111,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
     }
-</parameter>
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -136,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
             }
-</parameter>
             NOTIFICATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateStatus("Permission notification accordée ✓")
@@ -147,7 +140,6 @@ class MainActivity : AppCompatActivity() {
                     handler.postDelayed({ checkPermissions() }, 300) // Continue anyway for notifications
                 }
             }
-</parameter>
         }
     }
 
@@ -158,7 +150,6 @@ class MainActivity : AppCompatActivity() {
             handler.postDelayed({ checkPermissions() }, 300) // Re-check after permission grant
         }
     }
-</parameter>
 
     companion object {
         const val AUDIO_PERMISSION_REQUEST_CODE = 1000

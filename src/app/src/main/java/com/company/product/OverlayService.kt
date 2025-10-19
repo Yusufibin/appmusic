@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.app.usage.UsageStatsManager
+import android.app.usage.UsageStats
 import android.content.Intent
 import android.graphics.PixelFormat
 import android.media.AudioAttributes
@@ -25,6 +26,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.room.Room
+import com.google.android.material.switchmaterial.MaterialSwitch
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -312,7 +314,7 @@ class OverlayService : Service() {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 Toast.makeText(this@OverlayService, "Music volume: ${musicSeekBar.progress}%", Toast.LENGTH_SHORT).show()
-                logAction("volume_changed", mapOf("stream" to "music", "volume" to musicSeekBar.progress), mapOf("volume" to prevProgress))
+                logAction("volume_changed", mapOf("volume" to musicSeekBar.progress), mapOf("volume" to prevProgress))
             }
         })
 
@@ -329,7 +331,7 @@ class OverlayService : Service() {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 Toast.makeText(this@OverlayService, "Chat volume: ${chatSeekBar.progress}%", Toast.LENGTH_SHORT).show()
-                logAction("volume_changed", mapOf("stream" to "chat", "volume" to chatSeekBar.progress), mapOf("volume" to prevProgress))
+                logAction("volume_changed", mapOf("volume" to chatSeekBar.progress), mapOf("volume" to prevProgress))
             }
         })
 
@@ -346,7 +348,7 @@ class OverlayService : Service() {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 Toast.makeText(this@OverlayService, "System volume: ${systemSeekBar.progress}%", Toast.LENGTH_SHORT).show()
-                logAction("volume_changed", mapOf("stream" to "system", "volume" to systemSeekBar.progress), mapOf("volume" to prevProgress))
+                logAction("volume_changed", mapOf("volume" to systemSeekBar.progress), mapOf("volume" to prevProgress))
             }
         })
 
@@ -359,7 +361,7 @@ class OverlayService : Service() {
         overlayView.findViewById<Button>(R.id.undo_button).setOnClickListener { undoLastAction() }
 
         // Debug switch
-        val debugSwitch = overlayView.findViewById<com.google.android.material.switchmaterial.MaterialSwitch>(R.id.debug_switch)
+        val debugSwitch = overlayView.findViewById<MaterialSwitch>(R.id.debug_switch)
         debugSwitch.isChecked = isDebugMode
         debugSwitch.setOnCheckedChangeListener { _, isChecked ->
             isDebugMode = isChecked

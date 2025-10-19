@@ -60,7 +60,8 @@ class OverlayService : Service() {
                 "Audio Overlay",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "AudioOverlay Mix is running"
+                description = "AudioOverlay Mix est actif"
+                setShowBadge(false)
             }
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
@@ -68,37 +69,147 @@ class OverlayService : Service() {
     }
 
     private fun createNotification(): Notification {
+        // Intent to open AudioControlActivity
+        val openIntent = android.app.PendingIntent.getActivity(
+            this,
+            0,
+            Intent(this, AudioControlActivity::class.java),
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Intent for Solo preset
+        val soloIntent = android.app.PendingIntent.getBroadcast(
+            this,
+            1,
+            Intent("com.company.product.ACTION_PRESET_SOLO"),
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Intent for Multi preset
+        val multiIntent = android.app.PendingIntent.getBroadcast(
+            this,
+            2,
+            Intent("com.company.product.ACTION_PRESET_MULTI"),
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Intent for Music preset
+        val musicIntent = android.app.PendingIntent.getBroadcast(
+            this,
+            3,
+            Intent("com.company.product.ACTION_PRESET_MUSIC"),
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+        )
+
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(this, "audio_overlay_channel")
-                .setContentTitle("AudioOverlay Mix")
-                .setContentText("Overlay active - Tap to open")
+                .setContentTitle("🎵 AudioOverlay Mix")
+                .setContentText("Tapez pour ouvrir les contrôles")
                 .setSmallIcon(android.R.drawable.ic_media_play)
+                .setContentIntent(openIntent)
+                .setOngoing(true)
+                .addAction(android.R.drawable.ic_media_play, "Solo", soloIntent)
+                .addAction(android.R.drawable.ic_menu_call, "Multi", multiIntent)
+                .addAction(android.R.drawable.ic_media_ff, "Music", musicIntent)
+                .setStyle(Notification.MediaStyle()
+                    .setShowActionsInCompactView(0, 1, 2))
                 .build()
         } else {
             @Suppress("DEPRECATION")
             Notification.Builder(this)
-                .setContentTitle("AudioOverlay Mix")
-                .setContentText("Overlay active")
+                .setContentTitle("🎵 AudioOverlay Mix")
+                .setContentText("Service actif")
                 .setSmallIcon(android.R.drawable.ic_media_play)
+                .setContentIntent(openIntent)
                 .build()
         }
     }
 
     override fun onCreate() {
         super.onCreate()
-        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        database = Room.databaseBuilder(
-            applicationContext,
-            AudioDatabase::class.java, "audio_database"
-        ).build()
-        createNotificationChannel()
-        startForeground(1, createNotification())
-        requestAudioFocus()
-        createFloatingButton()
-        initializeDefaultPresets()
-        startAppDetection()
-        startAutoDuck()
+        android.util.Log.d("AudioOverlay", "=== Service onCreate() START ===")
+        try {
+            windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
+            android.util.Log.d("AudioOverlay", "WindowManager initialized")
+
+            audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+            android.util.Log.d("AudioOverlay", "AudioManager initialized")
+
+            database = Room.databaseBuilder(
+                applicationContext,
+                AudioDatabase::class.java, "audio_database"
+            ).build()
+            android.util.Log.d("AudioOverlay", "Database initialized")
+
+            createNotificationChannel()
+            android.util.Log.d("AudioOverlay", "Notification channel created")
+
+            startForeground(1, createNotification())
+            android.util.Log.d("AudioOverlay", "Service started in foreground")
+
+            requestAudioFocus()
+            android.util.Log.d("AudioOverlay", "Audio focus requested")
+
+            // Register broadcast receiver for notification actions
+            registerNotificationReceiver()
+            android.util.Log.d("AudioOverlay", "Notification receiver registered")
+
+            createFloatingButton()
+            android.util.Log.d("AudioOverlay", "Floating button creation attempted")
+
+            initializeDefaultPresets()
+            android.util.Log.d("AudioOverlay", "Default presets initialized")
+
+            startAppDetection()
+            android.util.Log.d("AudioOverlay", "App detection started")
+
+            startAutoDuck()
+            android.util.Log.d("AudioOverlay", "Auto-duck started")
+
+            android.util.Log.d("AudioOverlay", "=== Service onCreate() SUCCESS ===")
+        } catch (e: Exception) {
+            android.util.Log.e("AudioOverlay", "=== Service onCreate() FAILED ===", e)
+            Toast.makeText(this, "Erreur service: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private val notificationReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
+            when (intent?.action) {
+                "com.company.product.ACTION_PRESET_SOLO" -> {
+                    applyPreset(80, 20, 50)
+                    Toast.makeText(this@OverlayService, "✓ Preset Jeu Solo", Toast.LENGTH_SHORT).show()
+                }
+                "com.company.product.ACTION_PRESET_MULTI" -> {
+                    applyPreset(40, 100, 50)
+                    Toast.makeText(this@OverlayService, "✓ Preset Multi Chat", Toast.LENGTH_SHORT).show()
+                }
+                "com.company.product.ACTION_PRESET_MUSIC" -> {
+                    applyPreset(100, 50, 50)
+                    Toast.makeText(this@OverlayService, "✓ Preset Musique", Toast.LENGTH_SHORT).show()
+                }
+                "com.company.product.ACTION_UNDO" -> {
+                    undoLastAction()
+                }
+                "com.company.product.ACTION_TOGGLE_AUTO_DUCK" -> {
+                    val enabled = intent.getBooleanExtra("enabled", true)
+                    // Toggle auto-duck (implementation depends on your needs)
+                }
+            }
+        }
+    }
+
+    private fun registerNotificationReceiver() {
+        val filter = android.content.IntentFilter().apply {
+            addAction("com.company.product.ACTION_PRESET_SOLO")
+            addAction("com.company.product.ACTION_PRESET_MULTI")
+            addAction("com.company.product.ACTION_PRESET_MUSIC")
+            addAction("com.company.product.ACTION_UNDO")
+            addAction("com.company.product.ACTION_TOGGLE_AUTO_DUCK")
+            addAction("com.company.product.ACTION_VOLUME_CHANGED")
+            addAction("com.company.product.ACTION_PRESET_APPLIED")
+        }
+        registerReceiver(notificationReceiver, filter, android.content.Context.RECEIVER_NOT_EXPORTED)
     }
 
     private fun requestAudioFocus() {
@@ -222,23 +333,31 @@ class OverlayService : Service() {
     }
 
     private fun createFloatingButton() {
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = 0
-            y = 100
-        }
+        android.util.Log.d("AudioOverlay", "createFloatingButton() START")
+        try {
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                gravity = Gravity.TOP or Gravity.START
+                x = 0
+                y = 100
+            }
+            android.util.Log.d("AudioOverlay", "WindowManager params created")
 
-        floatingButton = LayoutInflater.from(this).inflate(R.layout.floating_button, null)
-        val button = floatingButton.findViewById<Button>(R.id.floating_button)
-        button.setOnClickListener {
-            toggleOverlay()
-        }
+            floatingButton = LayoutInflater.from(this).inflate(R.layout.floating_button, null)
+            android.util.Log.d("AudioOverlay", "Floating button layout inflated")
+
+            val button = floatingButton.findViewById<Button>(R.id.floating_button)
+            android.util.Log.d("AudioOverlay", "Button view found")
+
+            button.setOnClickListener {
+                android.util.Log.d("AudioOverlay", "Floating button clicked!")
+                toggleOverlay()
+            }
 
         button.setOnTouchListener { view, event ->
             when (event.action) {
@@ -266,7 +385,13 @@ class OverlayService : Service() {
             }
         }
 
-        windowManager.addView(floatingButton, params)
+            windowManager.addView(floatingButton, params)
+            android.util.Log.d("AudioOverlay", "✓ Floating button ADDED TO WINDOW MANAGER ✓")
+            Toast.makeText(this, "Bouton flottant ajouté !", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            android.util.Log.e("AudioOverlay", "✗ FAILED to create floating button ✗", e)
+            Toast.makeText(this, "ERREUR bouton: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun toggleOverlay() {
@@ -477,6 +602,11 @@ class OverlayService : Service() {
         super.onDestroy()
         audioRecord?.stop()
         audioRecord?.release()
+        try {
+            unregisterReceiver(notificationReceiver)
+        } catch (e: Exception) {
+            android.util.Log.e("AudioOverlay", "Error unregistering receiver", e)
+        }
         if (::floatingButton.isInitialized) {
             windowManager.removeView(floatingButton)
         }

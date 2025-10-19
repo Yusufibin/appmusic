@@ -28,9 +28,31 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AudioControlActivity"
+            android:exported="true"
+            android:label="Contrôles Audio"
+            android:theme="@style/Theme.MyApp">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".OverlayService"
             android:exported="false" />
+
+        <service
+            android:name=".AudioMixTileService"
+            android:exported="true"
+            android:icon="@android:drawable/ic_media_play"
+            android:label="AudioMix"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

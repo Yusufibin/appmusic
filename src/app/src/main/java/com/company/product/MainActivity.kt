@@ -84,9 +84,9 @@ class MainActivity : AppCompatActivity() {
         updateStatus("Toutes les permissions accordées ! Démarrage du service...")
         progressBar.visibility = View.VISIBLE
         startOverlayService()
-        // Attendre un peu avant de fermer pour s'assurer que le service démarre
+        // Ouvrir l'interface de contrôle après démarrage du service
         handler.postDelayed({
-            finish() // Close main activity
+            openAudioControl()
         }, 1000)
     }
 
@@ -110,6 +110,12 @@ class MainActivity : AppCompatActivity() {
             // Ne pas fermer l'activité en cas d'erreur pour permettre le débogage
             return
         }
+    }
+
+    private fun openAudioControl() {
+        val intent = Intent(this, AudioControlActivity::class.java)
+        startActivity(intent)
+        finish() // Fermer MainActivity après ouverture de l'interface de contrôle
     }
 
     override fun onRequestPermissionsResult(

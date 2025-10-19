@@ -1,1 +1,11 @@
 /build
+/schemas/*.json
+!/schemas/.gitkeep
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/captures
+.externalNativeBuild
+.cxx

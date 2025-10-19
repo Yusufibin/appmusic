@@ -121,7 +121,7 @@
         android:text="Undo"
         style="@style/Widget.Material3.Button.OutlinedButton" />
 
-    <com.google.android.material.switchmaterial.MaterialSwitch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/debug_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -26,7 +26,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.room.Room
-import com.google.android.material.switchmaterial.MaterialSwitch
+import androidx.appcompat.widget.SwitchCompat
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -361,9 +361,9 @@ class OverlayService : Service() {
         overlayView.findViewById<Button>(R.id.undo_button).setOnClickListener { undoLastAction() }
 
         // Debug switch
-        val debugSwitch = overlayView.findViewById<MaterialSwitch>(R.id.debug_switch)
+        val debugSwitch = overlayView.findViewById<SwitchCompat>(R.id.debug_switch)
         debugSwitch.isChecked = isDebugMode
-        debugSwitch.setOnCheckedChangeListener { _, isChecked ->
+        debugSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             isDebugMode = isChecked
             android.util.Log.d("AudioOverlay", "Debug mode: $isDebugMode")
         }

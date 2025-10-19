@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.content.pm.ServiceInfo
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -144,7 +145,14 @@ class OverlayService : Service() {
             createNotificationChannel()
             android.util.Log.d("AudioOverlay", "Notification channel created")
 
-            startForeground(1, createNotification())
+            // Start foreground with proper type for Android 14+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(1, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(1, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            } else {
+                startForeground(1, createNotification())
+            }
             android.util.Log.d("AudioOverlay", "Service started in foreground")
 
             requestAudioFocus()

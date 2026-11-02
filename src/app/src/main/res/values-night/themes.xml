@@ -1,16 +1,21 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Theme.MyApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@android:color/system_accent1_200</item>
-        <item name="colorPrimaryVariant">@android:color/system_accent1_300</item>
-        <item name="colorOnPrimary">@android:color/system_accent1_900</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@android:color/system_accent2_200</item>
-        <item name="colorSecondaryVariant">@android:color/system_accent2_300</item>
-        <item name="colorOnSecondary">@android:color/system_accent2_900</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="21">@android:color/system_neutral1_900</item>
-        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryContainer">@color/soft_green</item>
+        <item name="colorOnSecondaryContainer">@color/ink</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorOnSurfaceVariant">@color/muted</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:colorBackground">@color/canvas</item>
+        <item name="android:statusBarColor">@color/canvas</item>
+        <item name="android:navigationBarColor">@color/hero</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="materialButtonStyle">@style/App.Button</item>
+        <item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
     </style>
 </resources>

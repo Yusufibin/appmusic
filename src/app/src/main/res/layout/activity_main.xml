@@ -1,67 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp"
-    android:background="?android:colorBackground">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/page" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:fillViewport="true" android:clipToPadding="false">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="24dp">
+            <ImageView android:layout_width="40dp" android:layout_height="40dp"
+                android:padding="8dp" android:background="@drawable/brand_tile"
+                android:src="@drawable/ic_connection" android:importantForAccessibility="no" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/app_name" android:textAppearance="@style/App.Heading" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/brand_subtitle" android:textSize="11sp" android:letterSpacing="0.12"
+                    android:textColor="@color/muted" />
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/version" android:textColor="@color/primary" android:textSize="12sp"
+                android:paddingHorizontal="12dp" android:paddingVertical="6dp" android:background="@drawable/soft_tile" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="8dp">
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/hero" app:strokeWidth="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="24dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/hero_eyebrow" android:textSize="11sp" android:letterSpacing="0.12"
+                    android:textColor="@color/mint" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:text="@string/hero_title" android:textSize="32sp"
+                    android:fontFamily="sans-serif-medium" android:lineSpacingExtra="2dp" android:textColor="#FFFFFF" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:text="@string/hero_description" android:textSize="14sp"
+                    android:lineSpacingExtra="3dp" android:textColor="@color/hero_muted" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <View
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:background="@drawable/circle_indicator" />
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/session_title" android:textAppearance="@style/App.Heading" />
+                <TextView android:id="@+id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:paddingHorizontal="12dp" android:paddingVertical="8dp"
+                    android:background="@drawable/soft_tile" android:text="@string/status_stopped"
+                    android:textColor="@color/primary" android:textSize="13sp" android:accessibilityLiveRegion="polite" />
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/connectionProgress" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:indeterminate="true" android:visibility="gone" />
+                <TextView android:id="@+id/tvSessionDetail" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:text="@string/session_idle" android:textAppearance="@style/App.Body" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp" android:orientation="horizontal" android:baselineAligned="false">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="@string/last_sync" android:textSize="11sp" android:textColor="@color/muted" />
+                        <TextView android:id="@+id/tvLastSync" android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:text="@string/never" android:textColor="@color/ink" android:textSize="20sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="@string/commands_count" android:textSize="11sp" android:textColor="@color/muted" />
+                        <TextView android:id="@+id/tvCommandCount" android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:text="@string/zero_count" android:textColor="@color/ink" android:textSize="20sp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSession"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                    android:text="@string/start" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="Bot en écoute..."
-            android:textSize="14sp"
-            android:textColor="?android:textColorSecondary" />
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/configuration_title" android:textAppearance="@style/App.Heading" />
+                <TextView android:id="@+id/tvConfigurationHint" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:text="@string/configuration_description" android:textAppearance="@style/App.Body" />
+                <com.google.android.material.textfield.TextInputLayout android:id="@+id/nameLayout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp"
+                    android:hint="@string/device_name" app:counterEnabled="true" app:counterMaxLength="48" app:placeholderText="@string/device_name_hint">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/etDeviceName"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="textCapSentences" android:maxLength="48" android:maxLines="1"
+                        android:imeOptions="actionNext" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout android:id="@+id/tokenLayout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                    android:hint="@string/bot_token" app:endIconMode="password_toggle" app:helperText="@string/token_helper">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/etToken"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="textPassword" android:maxLines="1" android:imeOptions="actionNext"
+                        android:importantForAutofill="no" android:saveEnabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout android:id="@+id/ownerLayout"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                    android:hint="@string/owner_id" app:helperText="@string/owner_helper">
+                    <com.google.android.material.textfield.TextInputEditText android:id="@+id/etOwnerId"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="number" android:maxLength="19" android:maxLines="1" android:imeOptions="actionDone" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnSave"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                    android:text="@string/save" style="@style/Widget.Material3.Button.TonalButton" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnTest"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/test_bot" style="@style/Widget.Material3.Button.OutlinedButton" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnGuide"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/setup_guide" style="@style/Widget.Material3.Button.TextButton" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/btnStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stop"
-            android:textSize="12sp"
-            style="@style/Widget.Material3.Button.TextButton" />
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/soft_green" app:strokeWidth="0dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/privacy_title" android:textAppearance="@style/TextAppearance.Material3.TitleMedium" android:textColor="@color/ink" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:text="@string/privacy_body" android:textAppearance="@style/App.Body" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/btnClear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            android:textSize="12sp"
-            style="@style/Widget.Material3.Button.TextButton" />
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/commands_title" android:textAppearance="@style/App.Heading" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:text="@string/commands_description" android:textAppearance="@style/App.Body" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:text="@string/commands_list" android:fontFamily="monospace"
+                    android:textSize="12sp" android:lineSpacingExtra="10dp" android:textColor="@color/ink" android:textIsSelectable="true" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView style="@style/App.Card"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="@string/journal_title" android:textAppearance="@style/App.Heading" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp" android:text="@string/journal_description" android:textAppearance="@style/App.Body" />
+                <ScrollView android:id="@+id/scrollLog" android:layout_width="match_parent" android:layout_height="180dp"
+                    android:layout_marginTop="16dp" android:background="@drawable/log_tile" android:padding="12dp" android:fillViewport="true">
+                    <TextView android:id="@+id/tvLog" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/empty_journal" android:textColor="@color/log_text" android:textSize="12sp"
+                        android:fontFamily="monospace" android:lineSpacingExtra="5dp" android:textIsSelectable="true" />
+                </ScrollView>
+                <com.google.android.material.button.MaterialButton android:id="@+id/btnClear"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="end"
+                    android:text="@string/clear" style="@style/Widget.Material3.Button.TextButton" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnForget"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+            android:text="@string/forget" android:textColor="@color/error" style="@style/Widget.Material3.Button.TextButton" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp" android:text="@string/footer" android:textSize="11sp"
+            android:letterSpacing="0.08" android:gravity="center" android:textColor="@color/muted" />
     </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollLog"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#1A1A1A"
-        android:padding="8dp"
-        android:fillViewport="true">
-
-        <TextView
-            android:id="@+id/tvLog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Waiting for Telegram updates...\n"
-            android:textSize="12sp"
-            android:textColor="#00FF00"
-            android:typeface="monospace" />
-    </ScrollView>
-
-</LinearLayout>
+</androidx.core.widget.NestedScrollView>

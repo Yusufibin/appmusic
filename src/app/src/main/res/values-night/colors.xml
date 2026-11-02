@@ -1,0 +1,11 @@
+<resources>
+    <color name="primary">#9DDDB8</color>
+    <color name="on_primary">#103A2C</color>
+    <color name="canvas">#101B17</color>
+    <color name="surface">#192B23</color>
+    <color name="ink">#E1EEE6</color>
+    <color name="muted">#B1C4B8</color>
+    <color name="outline">#3E5549</color>
+    <color name="soft_green">#254537</color>
+    <color name="error">#FFB4AB</color>
+</resources>
